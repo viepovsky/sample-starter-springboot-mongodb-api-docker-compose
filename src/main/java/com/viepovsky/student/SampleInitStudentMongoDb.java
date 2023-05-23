@@ -7,7 +7,6 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Configuration
@@ -22,20 +21,13 @@ class SampleInitStudentMongoDb {
                     "61-397",
                     "Jastrzębia 13"
             );
-            Subject subject = new Subject(
-                    "Math",
-                    "14F",
-                    "Monica Monroe",
-                    16
-            );
             Student student = new Student(
                     "Mark",
                     "Martens",
-                    Student.Gender.MALE,
+                    "MALE",
                     studentNumber,
                     address,
-                    List.of(subject),
-                    LocalDateTime.now()
+                    List.of("Math")
             );
             //usageMongoTemplateAndQuery(repository, mongoTemplate, studentNumber, student);
             if (repository.findByStudentNumber(studentNumber).isEmpty()) {

@@ -1,6 +1,10 @@
 package com.viepovsky.student;
 
+import com.viepovsky.student.dto.CreateStudentRequest;
+import com.viepovsky.student.dto.UpdateStudentRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -8,6 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/students")
 @RequiredArgsConstructor
+@Validated
 class StudentController {
     private final StudentService service;
 
@@ -17,13 +22,13 @@ class StudentController {
     }
 
     @PostMapping
-    void create(@RequestBody Student student) {
-        service.create(student);
+    void create(@RequestBody @Valid CreateStudentRequest request) {
+        service.create(request);
     }
 
     @PutMapping(path = "/{number}")
-    void update(@RequestBody Student student, @PathVariable Long number) {
-        service.update(student, number);
+    void update(@RequestBody UpdateStudentRequest request, @PathVariable Long number) {
+        service.update(request, number);
     }
 
     @DeleteMapping(path = "/{number}")
