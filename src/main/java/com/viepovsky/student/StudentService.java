@@ -1,5 +1,7 @@
 package com.viepovsky.student;
 
+import com.viepovsky.exceptions.StudentExistsException;
+import com.viepovsky.exceptions.StudentNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,12 +17,12 @@ class StudentService {
     }
 
     Student getByStudentNumber(Long number) {
-        return repository.findByStudentNumber(number).orElseThrow(() -> new IllegalArgumentException("Student with given number: " + number + " does not exist."));
+        return repository.findByStudentNumber(number).orElseThrow(() -> new StudentNotFoundException("Student with given number: " + number + " does not exist."));
     }
 
     Student create(Student student) {
         if (repository.existsByStudentNumber(student.getStudentNumber())) {
-            throw new IllegalArgumentException("Student with given number: " + student.getStudentNumber() + " already exists.");
+            throw new StudentExistsException("Student with given number: " + student.getStudentNumber() + " already exists.");
         }
         return repository.save(student);
     }
@@ -28,7 +30,7 @@ class StudentService {
     void update(Student student, Long number) {
         var studentToUpdate = repository
                 .findByStudentNumber(number)
-                .orElseThrow(() -> new IllegalArgumentException("Student with given number: " + number + " does not exist."));
+                .orElseThrow(() -> new StudentNotFoundException("Student with given number: " + number + " does not exist."));
         studentToUpdate.updateFrom(student);
         repository.save(studentToUpdate);
     }
@@ -36,7 +38,7 @@ class StudentService {
     void delete(Long number) {
         var student = repository
                 .findByStudentNumber(number)
-                .orElseThrow(() -> new IllegalArgumentException("Student with given number: " + number + " does not exists."));
+                .orElseThrow(() -> new StudentNotFoundException("Student with given number: " + number + " does not exists."));
         repository.delete(student);
     }
 }
