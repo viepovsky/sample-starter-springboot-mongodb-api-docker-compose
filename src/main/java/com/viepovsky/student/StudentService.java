@@ -1,7 +1,5 @@
 package com.viepovsky.student;
 
-import com.viepovsky.student.dto.CreateStudentRequest;
-import com.viepovsky.student.dto.UpdateStudentRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,25 +9,26 @@ import java.util.List;
 @RequiredArgsConstructor
 class StudentService {
     private final StudentRepository repository;
-    private final StudentMapper mapper;
 
     List<Student> getAll() {
         return repository.findAll();
     }
 
-    void create(CreateStudentRequest request) {
-        var student = mapper.mapToStudent(request);
+    Student getByStudentNumber(Long number) {
+        return repository.findByStudentNumber(number).orElseThrow(() -> new IllegalArgumentException("Student with given number: " + number + " does not exist."));
+    }
+
+    Student create(Student student) {
         if (repository.existsByStudentNumber(student.getStudentNumber())) {
             throw new IllegalArgumentException("Student with given number: " + student.getStudentNumber() + " already exists.");
         }
-        repository.save(student);
+        return repository.save(student);
     }
 
-    void update(UpdateStudentRequest request, Long number) {
-        var student = mapper.mapToStudent(request);
+    void update(Student student, Long number) {
         var studentToUpdate = repository
                 .findByStudentNumber(number)
-                .orElseThrow(() -> new IllegalArgumentException("Student with given number: " + number + " does not exists."));
+                .orElseThrow(() -> new IllegalArgumentException("Student with given number: " + number + " does not exist."));
         studentToUpdate.updateFrom(student);
         repository.save(studentToUpdate);
     }

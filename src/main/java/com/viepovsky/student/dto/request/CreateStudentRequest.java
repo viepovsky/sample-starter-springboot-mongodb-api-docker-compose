@@ -1,4 +1,4 @@
-package com.viepovsky.student.dto;
+package com.viepovsky.student.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
